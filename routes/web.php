@@ -13,7 +13,7 @@ Route::prefix('app-key-security')
 
         /*
         |--------------------------------------------------------------------------
-        | Security Dashboard
+        | Dashboard
         |--------------------------------------------------------------------------
         */
 
@@ -54,4 +54,40 @@ Route::prefix('app-key-security')
             AppKeySecurityController::class,
             'securityAudit'
         ])->name('security-audit');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Feature 3
+        | Clear Configuration Cache
+        |--------------------------------------------------------------------------
+        */
+
+        Route::post('/clear-config-cache', [
+            AppKeySecurityController::class,
+            'clearConfigCache'
+        ])->name('clear-config-cache');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Feature 4
+        | Clear Application Cache
+        |--------------------------------------------------------------------------
+        */
+
+        Route::post('/clear-application-cache', [
+            AppKeySecurityController::class,
+            'clearApplicationCache'
+        ])->name('clear-application-cache');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Feature 6
+        | Export Security Audit
+        |--------------------------------------------------------------------------
+        */
+
+        Route::get('/export-audit', [
+            AppKeySecurityController::class,
+            'exportAudit'
+        ])->name('export-audit');
     });
