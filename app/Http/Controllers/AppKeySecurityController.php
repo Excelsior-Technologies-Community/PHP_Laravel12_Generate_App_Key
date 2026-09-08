@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Throwable;
 
 class AppKeySecurityController extends Controller
@@ -17,7 +18,59 @@ class AppKeySecurityController extends Controller
     {
         $health = $this->getHealthChecks();
 
-        return view('app-key-security.index', compact('health'));
+        $appKey = config('app.key');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Feature 1: APP_KEY Fingerprint
+        |--------------------------------------------------------------------------
+        |
+        | We never display the actual APP_KEY.
+        | Only a SHA-256 fingerprint is shown.
+        |
+        */
+
+        $fingerprint = $appKey
+            ? strtoupper(hash('sha256', $appKey))
+            : 'Unavailable';
+
+        /*
+        |--------------------------------------------------------------------------
+        | Feature 2: System Information
+        |--------------------------------------------------------------------------
+        */
+
+        $systemInfo = [
+            'php_version' => PHP_VERSION,
+            'laravel_version' => app()->version(),
+            'environment' => app()->environment(),
+            'debug' => config('app.debug') ? 'Enabled' : 'Disabled',
+            'cipher' => config('app.cipher', 'AES-256-CBC'),
+            'config_cached' => app()->configurationIsCached()
+                ? 'Cached'
+                : 'Not Cached',
+            'app_key_status' => $appKey
+                ? 'Configured'
+                : 'Missing',
+        ];
+
+        /*
+        |--------------------------------------------------------------------------
+        | Feature 5: Storage Writable Check
+        |--------------------------------------------------------------------------
+        */
+
+        $storageWritable = is_writable(storage_path());
+
+        return view(
+            'app-key-security.index',
+            compact(
+                'health',
+                'fingerprint',
+                'systemInfo',
+                'storageWritable'
+            )
+        );
     }
 
     /**
@@ -33,9 +86,10 @@ class AppKeySecurityController extends Controller
             $oldKeyExists = !empty(config('app.key'));
 
             if (!$oldKeyExists) {
-                return redirect()->route('app-key-security.index', [
-                    'status' => 'missing-key',
-                ]);
+                return redirect()->route(
+                    'app-key-security.index',
+                    ['status' => 'missing-key']
+                );
             }
 
             Artisan::call('key:generate', [
@@ -53,18 +107,20 @@ class AppKeySecurityController extends Controller
                 ]
             );
 
-            return redirect()->route('app-key-security.index', [
-                'status' => 'rotated',
-            ]);
+            return redirect()->route(
+                'app-key-security.index',
+                ['status' => 'rotated']
+            );
         } catch (Throwable $e) {
             Log::error('APP_KEY rotation failed.', [
                 'message' => $e->getMessage(),
                 'ip' => $request->ip(),
             ]);
 
-            return redirect()->route('app-key-security.index', [
-                'status' => 'failed',
-            ]);
+            return redirect()->route(
+                'app-key-security.index',
+                ['status' => 'failed']
+            );
         }
     }
 
@@ -77,6 +133,7 @@ class AppKeySecurityController extends Controller
             $originalText = 'Laravel APP_KEY security test';
 
             $encrypted = Crypt::encryptString($originalText);
+
             $decrypted = Crypt::decryptString($encrypted);
 
             if ($originalText !== $decrypted) {
@@ -109,14 +166,75 @@ class AppKeySecurityController extends Controller
     }
 
     /**
-     * Run APP_KEY security audit.
+     * Feature 3:
+     * Clear Laravel configuration cache.
+     */
+    public function clearConfigCache()
+    {
+        try {
+            Artisan::call('config:clear');
+
+            return redirect()
+                ->route('app-key-security.index')
+                ->with(
+                    'success',
+                    'Laravel configuration cache cleared successfully.'
+                );
+        } catch (Throwable $e) {
+            Log::error('Configuration cache clear failed.', [
+                'message' => $e->getMessage(),
+            ]);
+
+            return redirect()
+                ->route('app-key-security.index')
+                ->with(
+                    'error',
+                    'Configuration cache could not be cleared.'
+                );
+        }
+    }
+
+    /**
+     * Feature 4:
+     * Clear Laravel application cache.
+     */
+    public function clearApplicationCache()
+    {
+        try {
+            Artisan::call('cache:clear');
+
+            return redirect()
+                ->route('app-key-security.index')
+                ->with(
+                    'success',
+                    'Laravel application cache cleared successfully.'
+                );
+        } catch (Throwable $e) {
+            Log::error('Application cache clear failed.', [
+                'message' => $e->getMessage(),
+            ]);
+
+            return redirect()
+                ->route('app-key-security.index')
+                ->with(
+                    'error',
+                    'Application cache could not be cleared.'
+                );
+        }
+    }
+
+    /**
+     * Security Audit.
      */
     public function securityAudit()
     {
         try {
             $audit = $this->runSecurityAudit();
 
-            return view('app-key-security.audit', compact('audit'));
+            return view(
+                'app-key-security.audit',
+                compact('audit')
+            );
         } catch (Throwable $e) {
             Log::error('APP_KEY security audit failed.', [
                 'message' => $e->getMessage(),
@@ -127,6 +245,40 @@ class AppKeySecurityController extends Controller
                 ->with(
                     'error',
                     'Security audit could not be completed. Check the Laravel log for details.'
+                );
+        }
+    }
+
+    /**
+     * Feature 6:
+     * Export security audit as JSON.
+     */
+    public function exportAudit()
+    {
+        try {
+            $audit = $this->runSecurityAudit();
+
+            return response()->json([
+                'application' => config('app.name'),
+                'generated_at' => now()->toDateTimeString(),
+                'security_score' => $audit['score'],
+                'security_level' => $audit['level'],
+                'passed_checks' => $audit['passed'],
+                'failed_checks' => $audit['failed'],
+                'critical_issues' => $audit['critical'],
+                'warnings' => $audit['warnings'],
+                'checks' => $audit['checks'],
+            ]);
+        } catch (Throwable $e) {
+            Log::error('Security audit export failed.', [
+                'message' => $e->getMessage(),
+            ]);
+
+            return redirect()
+                ->route('app-key-security.index')
+                ->with(
+                    'error',
+                    'Security audit export failed.'
                 );
         }
     }
@@ -143,12 +295,18 @@ class AppKeySecurityController extends Controller
         $keyFormatValid = false;
 
         if ($keyExists) {
-            $keyFormatValid = str_starts_with($appKey, 'base64:');
+            $keyFormatValid = str_starts_with(
+                $appKey,
+                'base64:'
+            );
 
             if ($keyFormatValid) {
                 $encodedKey = substr($appKey, 7);
 
-                $decodedKey = base64_decode($encodedKey, true);
+                $decodedKey = base64_decode(
+                    $encodedKey,
+                    true
+                );
 
                 $keyFormatValid =
                     $decodedKey !== false &&
@@ -156,12 +314,16 @@ class AppKeySecurityController extends Controller
             }
         }
 
-        $envFileExists = file_exists(base_path('.env'));
+        $envFileExists = file_exists(
+            base_path('.env')
+        );
 
         $configKeyMatchesEnvironment = false;
 
         if ($envFileExists) {
-            $envContent = file_get_contents(base_path('.env'));
+            $envContent = file_get_contents(
+                base_path('.env')
+            );
 
             if ($envContent !== false) {
                 preg_match(
@@ -180,29 +342,54 @@ class AppKeySecurityController extends Controller
             }
         }
 
-        $configCached = app()->configurationIsCached();
+        $configCached =
+            app()->configurationIsCached();
 
         $encryptionWorking = false;
 
         try {
-            $testValue = 'APP_KEY_HEALTH_CHECK';
+            $testValue =
+                'APP_KEY_HEALTH_CHECK';
 
-            $encrypted = Crypt::encryptString($testValue);
-            $decrypted = Crypt::decryptString($encrypted);
+            $encrypted =
+                Crypt::encryptString($testValue);
 
-            $encryptionWorking = $testValue === $decrypted;
+            $decrypted =
+                Crypt::decryptString($encrypted);
+
+            $encryptionWorking =
+                $testValue === $decrypted;
         } catch (Throwable) {
             $encryptionWorking = false;
         }
 
-        $cipher = config('app.cipher', 'AES-256-CBC');
+        $cipher =
+            config(
+                'app.cipher',
+                'AES-256-CBC'
+            );
 
-        $environment = app()->environment();
+        $environment =
+            app()->environment();
 
-        $debugEnabled = (bool) config('app.debug');
+        $debugEnabled =
+            (bool) config('app.debug');
 
         $previousKeysConfigured =
-            !empty(config('app.previous_keys', []));
+            !empty(config(
+                    'app.previous_keys',
+                    []
+                ));
+
+        /*
+        |--------------------------------------------------------------------------
+        | Feature 5:
+        | Storage writable health check
+        |--------------------------------------------------------------------------
+        */
+
+        $storageWritable =
+            is_writable(storage_path());
 
         return [
             'key_exists' => [
@@ -248,12 +435,17 @@ class AppKeySecurityController extends Controller
             'environment' => [
                 'label' => 'Application Environment',
                 'status' => true,
-                'message' => 'Application is running in ' . $environment . ' environment.',
+                'message' =>
+                'Application is running in ' .
+                    $environment .
+                    ' environment.',
             ],
 
             'debug' => [
                 'label' => 'Debug Mode',
-                'status' => $environment === 'local' || !$debugEnabled,
+                'status' =>
+                $environment === 'local' ||
+                    !$debugEnabled,
                 'message' => $debugEnabled
                     ? 'APP_DEBUG is currently enabled.'
                     : 'APP_DEBUG is disabled.',
@@ -280,6 +472,20 @@ class AppKeySecurityController extends Controller
                     ? 'Configuration is currently cached.'
                     : 'Configuration cache is currently cleared.',
             ],
+
+            /*
+            |--------------------------------------------------------------------------
+            | Feature 5
+            |--------------------------------------------------------------------------
+            */
+
+            'storage' => [
+                'label' => 'Storage Directory',
+                'status' => $storageWritable,
+                'message' => $storageWritable
+                    ? 'The Laravel storage directory is writable.'
+                    : 'The Laravel storage directory is not writable.',
+            ],
         ];
     }
 
@@ -290,13 +496,13 @@ class AppKeySecurityController extends Controller
     {
         $checks = [];
 
+        $appKey = config('app.key');
+
         /*
         |--------------------------------------------------------------------------
         | 1. APP_KEY existence
         |--------------------------------------------------------------------------
         */
-
-        $appKey = config('app.key');
 
         $checks[] = $this->auditCheck(
             'APP_KEY exists',
@@ -316,9 +522,14 @@ class AppKeySecurityController extends Controller
 
         if (!empty($appKey)) {
             if (str_starts_with($appKey, 'base64:')) {
-                $encodedKey = substr($appKey, 7);
+                $encodedKey =
+                    substr($appKey, 7);
 
-                $decodedKey = base64_decode($encodedKey, true);
+                $decodedKey =
+                    base64_decode(
+                        $encodedKey,
+                        true
+                    );
 
                 $keyFormatValid =
                     $decodedKey !== false &&
@@ -340,7 +551,8 @@ class AppKeySecurityController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $envExists = file_exists(base_path('.env'));
+        $envExists =
+            file_exists(base_path('.env'));
 
         $checks[] = $this->auditCheck(
             '.env file availability',
@@ -356,17 +568,26 @@ class AppKeySecurityController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $gitignorePath = base_path('.gitignore');
+        $gitignorePath =
+            base_path('.gitignore');
 
-        $gitignoreExists = file_exists($gitignorePath);
+        $gitignoreExists =
+            file_exists($gitignorePath);
 
         $envIgnored = false;
 
         if ($gitignoreExists) {
-            $gitignore = file_get_contents($gitignorePath);
+            $gitignore =
+                file_get_contents(
+                    $gitignorePath
+                );
 
             if ($gitignore !== false) {
-                $lines = preg_split('/\r\n|\r|\n/', $gitignore);
+                $lines =
+                    preg_split(
+                        '/\r\n|\r|\n/',
+                        $gitignore
+                    );
 
                 foreach ($lines as $line) {
                     $line = trim($line);
@@ -399,7 +620,8 @@ class AppKeySecurityController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $publicEnvExists = file_exists(public_path('.env'));
+        $publicEnvExists =
+            file_exists(public_path('.env'));
 
         $checks[] = $this->auditCheck(
             'Public .env exposure',
@@ -411,13 +633,15 @@ class AppKeySecurityController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | 6. APP_DEBUG configuration
+        | 6. APP_DEBUG
         |--------------------------------------------------------------------------
         */
 
-        $environment = app()->environment();
+        $environment =
+            app()->environment();
 
-        $debugEnabled = (bool) config('app.debug');
+        $debugEnabled =
+            (bool) config('app.debug');
 
         $debugSafe =
             $environment === 'local' ||
@@ -442,11 +666,18 @@ class AppKeySecurityController extends Controller
         $encryptionWorking = false;
 
         try {
-            $testValue = 'SECURITY_AUDIT_TEST';
+            $testValue =
+                'SECURITY_AUDIT_TEST';
 
-            $encrypted = Crypt::encryptString($testValue);
+            $encrypted =
+                Crypt::encryptString(
+                    $testValue
+                );
 
-            $decrypted = Crypt::decryptString($encrypted);
+            $decrypted =
+                Crypt::decryptString(
+                    $encrypted
+                );
 
             $encryptionWorking =
                 $testValue === $decrypted;
@@ -471,7 +702,10 @@ class AppKeySecurityController extends Controller
         $configMatchesEnv = false;
 
         if ($envExists) {
-            $envContent = file_get_contents(base_path('.env'));
+            $envContent =
+                file_get_contents(
+                    base_path('.env')
+                );
 
             if ($envContent !== false) {
                 preg_match(
@@ -480,7 +714,8 @@ class AppKeySecurityController extends Controller
                     $matches
                 );
 
-                $envKey = isset($matches[1])
+                $envKey =
+                    isset($matches[1])
                     ? trim($matches[1])
                     : '';
 
@@ -504,7 +739,8 @@ class AppKeySecurityController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $configCached = app()->configurationIsCached();
+        $configCached =
+            app()->configurationIsCached();
 
         $checks[] = $this->auditCheck(
             'Configuration cache state',
@@ -518,26 +754,33 @@ class AppKeySecurityController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | 10. APP_KEY exposure in environment/config files
+        | 10. APP_KEY exposure
         |--------------------------------------------------------------------------
         */
 
         $appKeyExposed = false;
 
         $filesToInspect = [
-            base_path('public/.env'),
-            base_path('public/env'),
-            base_path('storage/logs/laravel.log'),
+            public_path('.env'),
+            public_path('env'),
+            storage_path('logs/laravel.log'),
         ];
 
         foreach ($filesToInspect as $file) {
-            if (file_exists($file) && is_readable($file)) {
-                $content = @file_get_contents($file);
+            if (
+                file_exists($file) &&
+                is_readable($file)
+            ) {
+                $content =
+                    @file_get_contents($file);
 
                 if (
                     $content !== false &&
                     !empty($appKey) &&
-                    str_contains($content, $appKey)
+                    str_contains(
+                        $content,
+                        $appKey
+                    )
                 ) {
                     $appKeyExposed = true;
                     break;
@@ -551,6 +794,43 @@ class AppKeySecurityController extends Controller
             'critical',
             'The configured APP_KEY was not detected in publicly risky files.',
             'The actual APP_KEY was detected in a potentially unsafe file.'
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | 11. Storage writable
+        |--------------------------------------------------------------------------
+        */
+
+        $storageWritable =
+            is_writable(storage_path());
+
+        $checks[] = $this->auditCheck(
+            'Storage directory writable',
+            $storageWritable,
+            'warning',
+            'Laravel storage directory is writable.',
+            'Laravel storage directory is not writable.'
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | 12. .env file readable
+        |--------------------------------------------------------------------------
+        */
+
+        $envReadable =
+            $envExists &&
+            is_readable(
+                base_path('.env')
+            );
+
+        $checks[] = $this->auditCheck(
+            '.env file readable',
+            $envReadable,
+            'warning',
+            'The .env file is readable by the application.',
+            'The .env file cannot be read by the application.'
         );
 
         /*
@@ -573,11 +853,15 @@ class AppKeySecurityController extends Controller
             }
         }
 
-        $score = max(0, min(100, $score));
+        $score =
+            max(
+                0,
+                min(100, $score)
+            );
 
         /*
         |--------------------------------------------------------------------------
-        | Overall security level
+        | Security level
         |--------------------------------------------------------------------------
         */
 
@@ -595,20 +879,24 @@ class AppKeySecurityController extends Controller
             $levelClass = 'critical';
         }
 
-        $passed = collect($checks)
+        $passed =
+            collect($checks)
             ->where('status', true)
             ->count();
 
-        $failed = collect($checks)
+        $failed =
+            collect($checks)
             ->where('status', false)
             ->count();
 
-        $criticalIssues = collect($checks)
+        $criticalIssues =
+            collect($checks)
             ->where('status', false)
             ->where('severity', 'critical')
             ->count();
 
-        $warnings = collect($checks)
+        $warnings =
+            collect($checks)
             ->where('status', false)
             ->where('severity', 'warning')
             ->count();

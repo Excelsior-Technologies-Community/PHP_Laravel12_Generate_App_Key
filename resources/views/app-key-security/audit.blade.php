@@ -2,12 +2,12 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+        content="width=device-width, initial-scale=1.0">
 
     <title>APP_KEY Security Audit</title>
 
@@ -18,6 +18,7 @@
 
         body {
             margin: 0;
+
             font-family:
                 -apple-system,
                 BlinkMacSystemFont,
@@ -27,21 +28,23 @@
                 sans-serif;
 
             background: #f4f7fb;
+
             color: #172033;
         }
 
         .container {
             max-width: 1150px;
+
             margin: 0 auto;
+
             padding: 30px 20px 60px;
         }
 
         .header {
-            background: linear-gradient(
-                135deg,
-                #111827,
-                #263449
-            );
+            background:
+                linear-gradient(135deg,
+                    #111827,
+                    #263449);
 
             color: white;
 
@@ -57,11 +60,13 @@
 
         .header h1 {
             margin: 0 0 8px;
+
             font-size: 30px;
         }
 
         .header p {
             margin: 0;
+
             color: #cbd5e1;
         }
 
@@ -137,11 +142,13 @@
 
         .score {
             font-size: 48px;
+
             font-weight: 800;
         }
 
         .score-label {
             color: #64748b;
+
             font-size: 14px;
         }
 
@@ -255,11 +262,13 @@
 
         .icon.pass {
             background: #dcfce7;
+
             color: #15803d;
         }
 
         .icon.fail {
             background: #fee2e2;
+
             color: #dc2626;
         }
 
@@ -299,16 +308,19 @@
 
         .badge-critical {
             background: #fee2e2;
+
             color: #b91c1c;
         }
 
         .badge-warning {
             background: #fef3c7;
+
             color: #b45309;
         }
 
         .badge-info {
             background: #dbeafe;
+
             color: #1d4ed8;
         }
 
@@ -380,6 +392,18 @@
             color: #172033;
         }
 
+        .button-green {
+            background: #16a34a;
+
+            color: white;
+        }
+
+        .button-dark {
+            background: #334155;
+
+            color: white;
+        }
+
         @media (max-width: 800px) {
 
             .score-layout {
@@ -390,6 +414,7 @@
                 grid-template-columns:
                     repeat(2, 1fr);
             }
+
         }
 
         @media (max-width: 500px) {
@@ -413,122 +438,158 @@
             .check {
                 gap: 10px;
             }
+
+        }
+
+        @media print {
+
+            body {
+                background: white;
+            }
+
+            .back,
+            .actions {
+                display: none !important;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 0;
+            }
+
+            .header,
+            .score-section,
+            .audit-card {
+                box-shadow: none;
+            }
+
         }
     </style>
+
 </head>
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-    <a
-        href="{{ route('app-key-security.index') }}"
-        class="back"
-    >
-        ← Back to APP_KEY Dashboard
-    </a>
-
-    <div class="header">
-
-        <h1>
-            🛡️ APP_KEY Security Audit
-        </h1>
-
-        <p>
-            Automated security analysis of your Laravel
-            application key and encryption configuration.
-        </p>
-
-    </div>
+        <a
+            href="{{ route('app-key-security.index') }}"
+            class="back">
+            ← Back to APP_KEY Dashboard
+        </a>
 
 
-    {{-- Security Score --}}
+        <div class="header">
 
-    <div class="score-section">
+            <h1>
+                🛡️ APP_KEY Security Audit
+            </h1>
 
-        <div class="score-layout">
+            <p>
+                Automated security analysis of your Laravel
+                application key and encryption configuration.
+            </p>
 
-            <div>
+        </div>
 
-                <div
-                    class="score-circle {{ $audit['level_class'] }}"
-                >
 
-                    <div class="score">
-                        {{ $audit['score'] }}
-                    </div>
+        {{-- Security Score --}}
 
-                    <div class="score-label">
-                        / 100
+        <div class="score-section">
+
+            <div class="score-layout">
+
+                <div>
+
+                    <div
+                        class="score-circle
+                    {{ $audit['level_class'] }}">
+
+                        <div class="score">
+                            {{ $audit['score'] }}
+                        </div>
+
+                        <div class="score-label">
+                            / 100
+                        </div>
+
                     </div>
 
                 </div>
 
-            </div>
 
+                <div>
 
-            <div>
+                    <div
+                        class="security-level
+                    {{ $audit['level_class'] }}-text">
 
-                <div
-                    class="security-level
-                    {{ $audit['level_class'] }}-text"
-                >
-                    {{ $audit['level'] }}
-                </div>
-
-                <p>
-                    The security scanner analyzed your
-                    Laravel APP_KEY configuration and
-                    related application security settings.
-                </p>
-
-                <div class="stats">
-
-                    <div class="stat">
-
-                        <strong>
-                            {{ $audit['passed'] }}
-                        </strong>
-
-                        <span>
-                            Passed Checks
-                        </span>
+                        {{ $audit['level'] }}
 
                     </div>
 
-                    <div class="stat">
 
-                        <strong>
-                            {{ $audit['failed'] }}
-                        </strong>
+                    <p>
 
-                        <span>
-                            Failed Checks
-                        </span>
+                        The security scanner analyzed your
+                        Laravel APP_KEY configuration and
+                        related application security settings.
 
-                    </div>
+                    </p>
 
-                    <div class="stat">
 
-                        <strong>
-                            {{ $audit['critical'] }}
-                        </strong>
+                    <div class="stats">
 
-                        <span>
-                            Critical Issues
-                        </span>
+                        <div class="stat">
 
-                    </div>
+                            <strong>
+                                {{ $audit['passed'] }}
+                            </strong>
 
-                    <div class="stat">
+                            <span>
+                                Passed Checks
+                            </span>
 
-                        <strong>
-                            {{ $audit['warnings'] }}
-                        </strong>
+                        </div>
 
-                        <span>
-                            Warnings
-                        </span>
+
+                        <div class="stat">
+
+                            <strong>
+                                {{ $audit['failed'] }}
+                            </strong>
+
+                            <span>
+                                Failed Checks
+                            </span>
+
+                        </div>
+
+
+                        <div class="stat">
+
+                            <strong>
+                                {{ $audit['critical'] }}
+                            </strong>
+
+                            <span>
+                                Critical Issues
+                            </span>
+
+                        </div>
+
+
+                        <div class="stat">
+
+                            <strong>
+                                {{ $audit['warnings'] }}
+                            </strong>
+
+                            <span>
+                                Warnings
+                            </span>
+
+                        </div>
 
                     </div>
 
@@ -538,26 +599,25 @@
 
         </div>
 
-    </div>
+
+        {{-- Audit Checks --}}
+
+        <div class="audit-card">
+
+            <h2>
+                🔍 Security Audit Results
+            </h2>
 
 
-    {{-- Audit Checks --}}
-
-    <div class="audit-card">
-
-        <h2>
-            🔍 Security Audit Results
-        </h2>
-
-
-        @foreach($audit['checks'] as $check)
+            @foreach($audit['checks'] as $check)
 
             <div class="check">
 
                 <div
                     class="icon
-                    {{ $check['status'] ? 'pass' : 'fail' }}"
-                >
+                    {{ $check['status']
+                        ? 'pass'
+                        : 'fail' }}">
 
                     {{ $check['status'] ? '✓' : '!' }}
 
@@ -572,12 +632,13 @@
 
                         @if(!$check['status'])
 
-                            <span
-                                class="badge
-                                badge-{{ $check['severity'] }}"
-                            >
-                                {{ $check['severity'] }}
-                            </span>
+                        <span
+                            class="badge
+                                badge-{{ $check['severity'] }}">
+
+                            {{ $check['severity'] }}
+
+                        </span>
 
                         @endif
 
@@ -594,12 +655,12 @@
 
             </div>
 
-        @endforeach
+            @endforeach
 
 
-        {{-- Recommendations --}}
+            {{-- Recommendations --}}
 
-        @if($audit['failed'] > 0)
+            @if($audit['failed'] > 0)
 
             <div class="recommendations">
 
@@ -611,17 +672,19 @@
 
                     @foreach($audit['checks'] as $check)
 
-                        @if(!$check['status'])
+                    @if(!$check['status'])
 
-                            <li>
-                                <strong>
-                                    {{ $check['name'] }}:
-                                </strong>
+                    <li>
 
-                                {{ $check['message'] }}
-                            </li>
+                        <strong>
+                            {{ $check['name'] }}:
+                        </strong>
 
-                        @endif
+                        {{ $check['message'] }}
+
+                    </li>
+
+                    @endif
 
                     @endforeach
 
@@ -629,52 +692,73 @@
 
             </div>
 
-        @else
+            @else
 
             <div
                 class="recommendations"
                 style="
                     background:#f0fdf4;
                     border-color:#bbf7d0;
-                "
-            >
+                ">
 
                 <h3 style="color:#166534;">
+
                     ✓ Excellent Security Configuration
+
                 </h3>
 
                 <p style="margin-bottom:0;">
+
                     No failed security checks were detected.
+
                     Your APP_KEY configuration currently
                     passes all available security checks.
+
                 </p>
 
             </div>
 
-        @endif
+            @endif
 
 
-        <div class="actions">
+            {{-- Feature 7: Print --}}
 
-            <a
-                href="{{ route('app-key-security.index') }}"
-                class="button button-secondary"
-            >
-                ← Dashboard
-            </a>
+            <div class="actions">
 
-            <a
-                href="{{ route('app-key-security.security-audit') }}"
-                class="button button-primary"
-            >
-                🔄 Run Audit Again
-            </a>
+                <a
+                    href="{{ route('app-key-security.index') }}"
+                    class="button button-secondary">
+                    ← Dashboard
+                </a>
+
+
+                <a
+                    href="{{ route('app-key-security.security-audit') }}"
+                    class="button button-primary">
+                    🔄 Run Audit Again
+                </a>
+
+
+                <a
+                    href="{{ route('app-key-security.export-audit') }}"
+                    target="_blank"
+                    class="button button-green">
+                    📄 Export JSON
+                </a>
+
+
+                <button
+                    type="button"
+                    onclick="window.print()"
+                    class="button button-dark">
+                    🖨️ Print Audit
+                </button>
+
+            </div>
 
         </div>
 
     </div>
-
-</div>
 
 </body>
 

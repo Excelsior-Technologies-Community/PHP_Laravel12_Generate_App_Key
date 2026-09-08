@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -31,7 +32,8 @@
         }
 
         .header {
-            background: linear-gradient(135deg,
+            background:
+                linear-gradient(135deg,
                     #111827,
                     #1f2937);
 
@@ -82,17 +84,22 @@
 
         .summary-grid {
             display: grid;
+
             grid-template-columns:
                 repeat(auto-fit, minmax(220px, 1fr));
 
             gap: 18px;
+
             margin-bottom: 28px;
         }
 
         .summary-card {
             background: white;
+
             border-radius: 16px;
+
             padding: 22px;
+
             box-shadow:
                 0 5px 20px rgba(0, 0, 0, 0.06);
         }
@@ -120,10 +127,17 @@
             color: #d97706;
         }
 
+        .blue-text {
+            color: #2563eb;
+        }
+
         .section {
             background: white;
+
             border-radius: 18px;
+
             padding: 26px;
+
             margin-bottom: 25px;
 
             box-shadow:
@@ -132,9 +146,13 @@
 
         .section-header {
             display: flex;
+
             justify-content: space-between;
+
             align-items: center;
+
             gap: 15px;
+
             margin-bottom: 22px;
         }
 
@@ -144,25 +162,33 @@
 
         .section-header p {
             color: #6b7280;
+
             font-size: 13px;
+
             margin-top: 5px;
         }
 
         .health-list {
             display: flex;
+
             flex-direction: column;
+
             gap: 12px;
         }
 
         .health-item {
             display: flex;
+
             justify-content: space-between;
+
             align-items: center;
+
             gap: 20px;
 
             padding: 17px;
 
             border: 1px solid #e5e7eb;
+
             border-radius: 12px;
 
             background: #fafafa;
@@ -170,7 +196,9 @@
 
         .health-left {
             display: flex;
+
             align-items: center;
+
             gap: 14px;
         }
 
@@ -179,6 +207,7 @@
             height: 38px;
 
             display: flex;
+
             align-items: center;
             justify-content: center;
 
@@ -186,6 +215,8 @@
 
             font-weight: 800;
             font-size: 16px;
+
+            flex-shrink: 0;
         }
 
         .status-ok {
@@ -210,9 +241,13 @@
 
         .badge {
             padding: 6px 11px;
+
             border-radius: 20px;
+
             font-size: 12px;
+
             font-weight: 700;
+
             white-space: nowrap;
         }
 
@@ -228,6 +263,7 @@
 
         .info-grid {
             display: grid;
+
             grid-template-columns:
                 repeat(auto-fit, minmax(220px, 1fr));
 
@@ -236,23 +272,39 @@
 
         .info-card {
             padding: 18px;
+
             border: 1px solid #e5e7eb;
+
             border-radius: 12px;
+
             background: #fafafa;
         }
 
         .info-card small {
             display: block;
+
             color: #6b7280;
+
             margin-bottom: 7px;
         }
 
         .info-card strong {
             font-size: 16px;
+
+            word-break: break-word;
+        }
+
+        .fingerprint {
+            font-family: monospace;
+
+            font-size: 12px !important;
+
+            line-height: 1.6;
         }
 
         .actions {
             display: grid;
+
             grid-template-columns:
                 repeat(auto-fit, minmax(280px, 1fr));
 
@@ -261,7 +313,9 @@
 
         .action-card {
             border: 1px solid #e5e7eb;
+
             border-radius: 15px;
+
             padding: 22px;
         }
 
@@ -271,17 +325,25 @@
 
         .action-card p {
             color: #6b7280;
+
             font-size: 13px;
+
             line-height: 1.6;
+
             margin-bottom: 18px;
         }
 
         button {
             border: none;
+
             border-radius: 10px;
+
             padding: 12px 17px;
+
             cursor: pointer;
+
             font-weight: 700;
+
             font-size: 14px;
         }
 
@@ -294,31 +356,6 @@
             background: #1d4ed8;
         }
 
-        .btn-audit {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 44px;
-
-            padding: 12px 17px;
-
-            border-radius: 10px;
-
-            background: #2563eb;
-            color: white;
-
-            text-decoration: none;
-
-            font-weight: 700;
-            font-size: 14px;
-
-            transition: background 0.2s ease;
-        }
-
-        .btn-audit:hover {
-            background: #1d4ed8;
-        }
-
         .btn-danger {
             background: #dc2626;
             color: white;
@@ -328,33 +365,121 @@
             background: #b91c1c;
         }
 
+        .btn-green {
+            background: #16a34a;
+            color: white;
+        }
+
+        .btn-green:hover {
+            background: #15803d;
+        }
+
+        .btn-orange {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-gray {
+            background: #475569;
+            color: white;
+        }
+
+        .btn-audit {
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            min-height: 44px;
+
+            padding: 12px 17px;
+
+            border-radius: 10px;
+
+            background: #2563eb;
+
+            color: white;
+
+            text-decoration: none;
+
+            font-weight: 700;
+
+            font-size: 14px;
+        }
+
+        .btn-audit:hover {
+            background: #1d4ed8;
+        }
+
         .warning-box {
             background: #fff7ed;
+
             border: 1px solid #fed7aa;
+
             color: #9a3412;
+
             border-radius: 12px;
+
             padding: 17px;
+
             margin-top: 20px;
+
             line-height: 1.6;
+
             font-size: 13px;
         }
 
         .security-note {
             background: #eff6ff;
+
             border: 1px solid #bfdbfe;
+
             color: #1e40af;
+
             border-radius: 12px;
+
             padding: 17px;
+
             margin-top: 20px;
+
             line-height: 1.6;
+
             font-size: 13px;
         }
 
         .footer {
             text-align: center;
+
             padding: 30px 20px;
+
             color: #6b7280;
+
             font-size: 13px;
+        }
+
+        .copy-button {
+            margin-top: 10px;
+
+            background: #0f766e;
+
+            color: white;
+        }
+
+        .refresh-box {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+        }
+
+        .refresh-status {
+            font-size: 12px;
+
+            color: #64748b;
         }
 
         @media (max-width: 700px) {
@@ -369,20 +494,24 @@
 
             .health-item {
                 align-items: flex-start;
+
                 flex-direction: column;
             }
 
             .section-header {
                 align-items: flex-start;
+
                 flex-direction: column;
             }
         }
     </style>
+
 </head>
 
 <body>
 
     <header class="header">
+
         <div class="header-inner">
 
             <h1>
@@ -395,22 +524,29 @@
             </p>
 
         </div>
+
     </header>
 
 
     <div class="container">
 
-        {{-- APP_KEY Rotation Status --}}
+        {{-- Alerts --}}
 
         @if(request('status') === 'rotated')
 
         <div class="alert alert-success">
-            <strong>✓ APP_KEY Rotated Successfully</strong>
+
+            <strong>
+                ✓ APP_KEY Rotated Successfully
+            </strong>
 
             <div style="margin-top: 6px; font-weight: 500;">
+
                 A new Laravel application key has been generated
                 successfully and the configuration cache has been cleared.
+
             </div>
+
         </div>
 
         @endif
@@ -419,12 +555,19 @@
         @if(request('status') === 'missing-key')
 
         <div class="alert alert-error">
-            <strong>✕ APP_KEY Rotation Failed</strong>
+
+            <strong>
+                ✕ APP_KEY Rotation Failed
+            </strong>
 
             <div style="margin-top: 6px; font-weight: 500;">
+
                 No existing APP_KEY was found.
+
                 Generate an application key first.
+
             </div>
+
         </div>
 
         @endif
@@ -433,18 +576,23 @@
         @if(request('status') === 'failed')
 
         <div class="alert alert-error">
-            <strong>✕ APP_KEY Rotation Failed</strong>
+
+            <strong>
+                ✕ APP_KEY Rotation Failed
+            </strong>
 
             <div style="margin-top: 6px; font-weight: 500;">
+
                 The application key could not be rotated.
+
                 Please check the Laravel log for more information.
+
             </div>
+
         </div>
 
         @endif
 
-
-        {{-- Normal Session Messages --}}
 
         @if(session('success'))
 
@@ -465,29 +613,40 @@
 
 
         {{-- Summary --}}
+
         @php
+
         $totalChecks = count($health);
 
         $passedChecks = collect($health)
-        ->filter(fn ($item) => $item['status'])
+        ->filter(
+        fn ($item) => $item['status']
+        )
         ->count();
 
-        $failedChecks = $totalChecks - $passedChecks;
+        $failedChecks =
+        $totalChecks - $passedChecks;
 
-        $healthPercentage = $totalChecks > 0
-        ? round(($passedChecks / $totalChecks) * 100)
+        $healthPercentage =
+        $totalChecks > 0
+        ? round(
+        ($passedChecks / $totalChecks) * 100
+        )
         : 0;
+
         @endphp
 
 
         <div class="summary-grid">
 
             <div class="summary-card">
+
                 <div class="summary-title">
                     Overall Security Health
                 </div>
 
-                <div class="summary-value
+                <div
+                    class="summary-value
                 {{ $healthPercentage >= 80
                     ? 'success-text'
                     : 'danger-text' }}">
@@ -495,10 +654,12 @@
                     {{ $healthPercentage }}%
 
                 </div>
+
             </div>
 
 
             <div class="summary-card">
+
                 <div class="summary-title">
                     Passed Checks
                 </div>
@@ -506,15 +667,18 @@
                 <div class="summary-value success-text">
                     {{ $passedChecks }}
                 </div>
+
             </div>
 
 
             <div class="summary-card">
+
                 <div class="summary-title">
                     Failed Checks
                 </div>
 
-                <div class="summary-value
+                <div
+                    class="summary-value
                 {{ $failedChecks > 0
                     ? 'danger-text'
                     : 'success-text' }}">
@@ -522,10 +686,12 @@
                     {{ $failedChecks }}
 
                 </div>
+
             </div>
 
 
             <div class="summary-card">
+
                 <div class="summary-title">
                     Environment
                 </div>
@@ -533,17 +699,20 @@
                 <div class="summary-value">
                     {{ strtoupper(app()->environment()) }}
                 </div>
+
             </div>
 
         </div>
 
 
         {{-- Health Checks --}}
+
         <div class="section">
 
             <div class="section-header">
 
                 <div>
+
                     <h2>
                         🩺 Encryption & Configuration Health
                     </h2>
@@ -552,6 +721,24 @@
                         Real-time checks for your Laravel APP_KEY
                         and encryption configuration.
                     </p>
+
+                </div>
+
+                <div class="refresh-box">
+
+                    <button
+                        type="button"
+                        class="btn-green"
+                        onclick="location.reload()">
+                        🔄 Refresh
+                    </button>
+
+                    <span
+                        id="refreshStatus"
+                        class="refresh-status">
+                        Manual refresh
+                    </span>
+
                 </div>
 
             </div>
@@ -565,7 +752,8 @@
 
                     <div class="health-left">
 
-                        <div class="status-icon
+                        <div
+                            class="status-icon
                             {{ $check['status']
                                 ? 'status-ok'
                                 : 'status-fail' }}">
@@ -589,12 +777,17 @@
                     </div>
 
 
-                    <span class="badge
+                    <span
+                        class="badge
                         {{ $check['status']
                             ? 'badge-success'
                             : 'badge-danger' }}">
 
-                        {{ $check['status'] ? 'Healthy' : 'Action Required' }}
+                        {{
+                            $check['status']
+                                ? 'Healthy'
+                                : 'Action Required'
+                        }}
 
                     </span>
 
@@ -606,21 +799,144 @@
 
 
             <div class="security-note">
+
                 <strong>Security:</strong>
+
                 The actual APP_KEY is intentionally never displayed
-                by this dashboard. Only its configuration and health
-                status are inspected.
+                by this dashboard.
+
+                Only its configuration, fingerprint,
+                and health status are inspected.
+
+            </div>
+
+        </div>
+
+
+        {{-- Feature 1: Fingerprint --}}
+
+        <div class="section">
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        🔎 APP_KEY Fingerprint
+                    </h2>
+
+                    <p>
+                        A safe SHA-256 fingerprint of the current
+                        application key.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <small>
+                    SHA-256 Fingerprint
+                </small>
+
+                <strong
+                    id="fingerprint"
+                    class="fingerprint">
+                    {{ $fingerprint }}
+                </strong>
+
+                @if($fingerprint !== 'Unavailable')
+
+                <br>
+
+                <button
+                    type="button"
+                    class="copy-button"
+                    onclick="copyFingerprint()">
+                    📋 Copy Fingerprint
+                </button>
+
+                @endif
+
+            </div>
+
+        </div>
+
+
+        {{-- Feature 2: System Information --}}
+
+        <div class="section">
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        📊 System Information
+                    </h2>
+
+                    <p>
+                        Basic Laravel and PHP application information.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="info-grid">
+
+                @foreach($systemInfo as $label => $value)
+
+                <div class="info-card">
+
+                    <small>
+                        {{ ucwords(str_replace('_', ' ', $label)) }}
+                    </small>
+
+                    <strong>
+                        {{ $value }}
+                    </strong>
+
+                </div>
+
+                @endforeach
+
+
+                <div class="info-card">
+
+                    <small>
+                        Storage Writable
+                    </small>
+
+                    <strong
+                        class="{{ $storageWritable
+                        ? 'success-text'
+                        : 'danger-text' }}">
+
+                        {{ $storageWritable
+                        ? 'Yes'
+                        : 'No' }}
+
+                    </strong>
+
+                </div>
+
             </div>
 
         </div>
 
 
         {{-- Configuration Information --}}
+
         <div class="section">
 
             <div class="section-header">
 
                 <div>
+
                     <h2>
                         ⚙️ Application Encryption Information
                     </h2>
@@ -629,6 +945,7 @@
                         Safe configuration information without exposing
                         sensitive key material.
                     </p>
+
                 </div>
 
             </div>
@@ -669,7 +986,13 @@
                     </small>
 
                     <strong class="success-text">
-                        {{ config('app.key') ? 'Configured' : 'Missing' }}
+
+                        {{
+                        config('app.key')
+                            ? 'Configured'
+                            : 'Missing'
+                    }}
+
                     </strong>
 
                 </div>
@@ -681,11 +1004,18 @@
                         Debug Mode
                     </small>
 
-                    <strong class="{{ config('app.debug')
-                    ? 'warning-text'
-                    : 'success-text' }}">
+                    <strong
+                        class="{{
+                        config('app.debug')
+                            ? 'warning-text'
+                            : 'success-text'
+                    }}">
 
-                        {{ config('app.debug') ? 'Enabled' : 'Disabled' }}
+                        {{
+                        config('app.debug')
+                            ? 'Enabled'
+                            : 'Disabled'
+                    }}
 
                     </strong>
 
@@ -699,9 +1029,13 @@
                     </small>
 
                     <strong>
-                        {{ app()->configurationIsCached()
-                        ? 'Cached'
-                        : 'Not Cached' }}
+
+                        {{
+                        app()->configurationIsCached()
+                            ? 'Cached'
+                            : 'Not Cached'
+                    }}
+
                     </strong>
 
                 </div>
@@ -714,9 +1048,18 @@
                     </small>
 
                     <strong>
-                        {{ !empty(config('app.previous_keys', []))
-                        ? 'Configured'
-                        : 'Not Configured' }}
+
+                        {{
+                        !empty(
+                            config(
+                                'app.previous_keys',
+                                []
+                            )
+                        )
+                            ? 'Configured'
+                            : 'Not Configured'
+                    }}
+
                     </strong>
 
                 </div>
@@ -726,12 +1069,14 @@
         </div>
 
 
-        {{-- Actions --}}
+        {{-- Security Actions --}}
+
         <div class="section">
 
             <div class="section-header">
 
                 <div>
+
                     <h2>
                         🛠️ Security Actions
                     </h2>
@@ -739,6 +1084,7 @@
                     <p>
                         Perform encryption diagnostics and key management.
                     </p>
+
                 </div>
 
             </div>
@@ -747,6 +1093,7 @@
             <div class="actions">
 
                 {{-- Encryption Test --}}
+
                 <div class="action-card">
 
                     <h3>
@@ -754,14 +1101,17 @@
                     </h3>
 
                     <p>
-                        Run a live encryption and decryption test using
-                        Laravel's Crypt service to verify that your
-                        APP_KEY is working correctly.
+                        Run a live encryption and decryption test
+                        using Laravel's Crypt service.
                     </p>
 
                     <form
                         method="POST"
-                        action="{{ route('app-key-security.test-encryption') }}">
+                        action="{{
+                        route(
+                            'app-key-security.test-encryption'
+                        )
+                    }}">
 
                         @csrf
 
@@ -776,7 +1126,8 @@
                 </div>
 
 
-                {{-- Key Rotation --}}
+                {{-- Rotation --}}
+
                 <div class="action-card">
 
                     <h3>
@@ -791,7 +1142,11 @@
 
                     <form
                         method="POST"
-                        action="{{ route('app-key-security.rotate') }}"
+                        action="{{
+                        route(
+                            'app-key-security.rotate'
+                        )
+                    }}"
                         onsubmit="return confirmRotation();">
 
                         @csrf
@@ -812,7 +1167,9 @@
 
                 </div>
 
+
                 {{-- Security Audit --}}
+
                 <div class="action-card">
 
                     <h3>
@@ -820,15 +1177,123 @@
                     </h3>
 
                     <p>
-                        Run a complete security audit to identify APP_KEY,
-                        .env, encryption, debug-mode, configuration,
-                        and potential security risks.
+                        Run a complete security audit for APP_KEY,
+                        .env, encryption, debug mode and security risks.
                     </p>
 
                     <a
-                        href="{{ route('app-key-security.security-audit') }}"
+                        href="{{
+                        route(
+                            'app-key-security.security-audit'
+                        )
+                    }}"
                         class="btn-audit">
                         🛡️ Run Security Audit
+                    </a>
+
+                </div>
+
+
+                {{-- Feature 3 --}}
+
+                <div class="action-card">
+
+                    <h3>
+                        🧹 Clear Config Cache
+                    </h3>
+
+                    <p>
+                        Clear Laravel configuration cache after
+                        changing APP_KEY or .env settings.
+                    </p>
+
+                    <form
+                        method="POST"
+                        action="{{
+                        route(
+                            'app-key-security.clear-config-cache'
+                        )
+                    }}"
+                        onsubmit="
+                        return confirm(
+                            'Clear Laravel configuration cache?'
+                        );
+                    ">
+
+                        @csrf
+
+                        <button
+                            type="submit"
+                            class="btn-orange">
+                            Clear Config Cache
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                {{-- Feature 4 --}}
+
+                <div class="action-card">
+
+                    <h3>
+                        🧹 Clear Application Cache
+                    </h3>
+
+                    <p>
+                        Clear Laravel application cache using
+                        the cache:clear Artisan command.
+                    </p>
+
+                    <form
+                        method="POST"
+                        action="{{
+                        route(
+                            'app-key-security.clear-application-cache'
+                        )
+                    }}"
+                        onsubmit="
+                        return confirm(
+                            'Clear application cache?'
+                        );
+                    ">
+
+                        @csrf
+
+                        <button
+                            type="submit"
+                            class="btn-gray">
+                            Clear Application Cache
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                {{-- Feature 6 --}}
+
+                <div class="action-card">
+
+                    <h3>
+                        📄 Export Security Audit
+                    </h3>
+
+                    <p>
+                        Download the security audit information
+                        as JSON without exposing the actual APP_KEY.
+                    </p>
+
+                    <a
+                        href="{{
+                        route(
+                            'app-key-security.export-audit'
+                        )
+                    }}"
+                        target="_blank"
+                        class="btn-audit">
+                        📄 Export JSON
                     </a>
 
                 </div>
@@ -841,9 +1306,11 @@
                 <strong>⚠ Important:</strong>
 
                 APP_KEY rotation is a destructive security operation.
+
                 Existing encrypted sessions and cookies may become
-                invalid after the key changes. Users may need to log
-                in again. Never rotate the production key casually.
+                invalid after the key changes.
+
+                Never rotate the production key casually.
 
             </div>
 
@@ -851,6 +1318,7 @@
 
 
         {{-- Recommendations --}}
+
         <div class="section">
 
             <div class="section-header">
@@ -862,8 +1330,8 @@
                     </h2>
 
                     <p>
-                        Recommended practices for protecting your Laravel
-                        application key.
+                        Recommended practices for protecting your
+                        Laravel application key.
                     </p>
 
                 </div>
@@ -914,8 +1382,8 @@
                             </div>
 
                             <div class="health-message">
-                                Do not print, log, email, or display the
-                                actual application key.
+                                Do not print, log, email, or display
+                                the actual application key.
                             </div>
 
                         </div>
@@ -940,8 +1408,7 @@
                             </div>
 
                             <div class="health-message">
-                                Protect encrypted application traffic
-                                with HTTPS and secure cookies.
+                                Protect application traffic with HTTPS.
                             </div>
 
                         </div>
@@ -966,8 +1433,8 @@
                             </div>
 
                             <div class="health-message">
-                                If the APP_KEY is exposed, rotate it
-                                immediately and investigate the exposure.
+                                If APP_KEY is exposed, rotate it immediately
+                                and investigate the exposure.
                             </div>
 
                         </div>
@@ -979,6 +1446,7 @@
             </div>
 
         </div>
+
 
     </div>
 
@@ -995,19 +1463,60 @@
 
 
     <script>
+        /*
+    |--------------------------------------------------------------------------
+    | Feature 1:
+    | Copy APP_KEY fingerprint
+    |--------------------------------------------------------------------------
+    */
+
+        function copyFingerprint() {
+
+            const fingerprint =
+                document.getElementById(
+                    "fingerprint"
+                ).innerText.trim();
+
+            navigator.clipboard
+                .writeText(fingerprint)
+                .then(function() {
+
+                    alert(
+                        "APP_KEY fingerprint copied successfully."
+                    );
+
+                })
+                .catch(function() {
+
+                    alert(
+                        "Unable to copy fingerprint."
+                    );
+
+                });
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Existing APP_KEY confirmation
+        |--------------------------------------------------------------------------
+        */
+
         function confirmRotation() {
 
-            const firstConfirmation = confirm(
-                "WARNING: Rotating APP_KEY can invalidate existing encrypted sessions and cookies.\n\nDo you want to continue?"
-            );
+            const firstConfirmation =
+                confirm(
+                    "WARNING: Rotating APP_KEY can invalidate existing encrypted sessions and cookies.\n\nDo you want to continue?"
+                );
 
             if (!firstConfirmation) {
                 return false;
             }
 
-            const secondConfirmation = prompt(
-                "Type ROTATE to confirm APP_KEY rotation:"
-            );
+            const secondConfirmation =
+                prompt(
+                    "Type ROTATE to confirm APP_KEY rotation:"
+                );
 
             if (secondConfirmation !== "ROTATE") {
 
@@ -1024,6 +1533,43 @@
 
             return true;
         }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Feature 8:
+        | Auto refresh
+        |--------------------------------------------------------------------------
+        */
+
+        let autoRefreshSeconds = 60;
+
+        const refreshStatus =
+            document.getElementById(
+                "refreshStatus"
+            );
+
+        setInterval(function() {
+
+            autoRefreshSeconds--;
+
+            if (autoRefreshSeconds <= 0) {
+
+                location.reload();
+
+                return;
+            }
+
+            if (refreshStatus) {
+
+                refreshStatus.innerText =
+                    "Auto refresh in " +
+                    autoRefreshSeconds +
+                    " seconds";
+
+            }
+
+        }, 1000);
     </script>
 
 </body>
