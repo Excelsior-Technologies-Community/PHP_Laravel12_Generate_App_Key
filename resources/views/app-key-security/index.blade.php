@@ -917,9 +917,22 @@
                         : 'danger-text' }}">
 
                         {{ $storageWritable
-                        ? 'Yes'
-                        : 'No' }}
+                            ? 'Yes'
+                            : 'No' }}
 
+                    </strong>
+
+                </div>
+
+
+                <div class="info-card">
+
+                    <small>
+                        .env Last Modified
+                    </small>
+
+                    <strong>
+                        {{ $envModifiedAt }}
                     </strong>
 
                 </div>
