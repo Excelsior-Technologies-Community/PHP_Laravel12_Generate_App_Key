@@ -52,6 +52,11 @@ class AppKeySecurityController extends Controller
             'app_key_status' => $appKey
                 ? 'Configured'
                 : 'Missing',
+            'https' => request()->secure() ? 'Enabled' : 'Disabled',
+            'session_driver' => config('session.driver', 'file'),
+            'session_secure' => config('session.secure', false) ? 'Yes' : 'No',
+            'session_http_only' => config('session.http_only', true) ? 'Yes' : 'No',
+            'session_same_site' => config('session.same_site', 'lax'),
         ];
 
         /*
@@ -62,13 +67,23 @@ class AppKeySecurityController extends Controller
 
         $storageWritable = is_writable(storage_path());
 
+        $envModifiedAt = 'N/A';
+
+        if (file_exists(base_path('.env'))) {
+            $envModifiedAt = date(
+                'Y-m-d H:i:s',
+                filemtime(base_path('.env'))
+            );
+        }
+
         return view(
             'app-key-security.index',
             compact(
                 'health',
                 'fingerprint',
                 'systemInfo',
-                'storageWritable'
+                'storageWritable',
+                'envModifiedAt'
             )
         );
     }
@@ -391,6 +406,23 @@ class AppKeySecurityController extends Controller
         $storageWritable =
             is_writable(storage_path());
 
+        $httpsEnabled = request()->secure();
+
+        $sessionSecure = config('session.secure', false);
+
+        $sessionHttpOnly = config('session.http_only', true);
+
+        $sessionSameSite = config('session.same_site', 'lax');
+
+        $envModifiedAt = 'N/A';
+
+        if (file_exists(base_path('.env'))) {
+            $envModifiedAt = date(
+                'Y-m-d H:i:s',
+                filemtime(base_path('.env'))
+            );
+        }
+
         return [
             'key_exists' => [
                 'label' => 'APP_KEY Available',
@@ -485,6 +517,42 @@ class AppKeySecurityController extends Controller
                 'message' => $storageWritable
                     ? 'The Laravel storage directory is writable.'
                     : 'The Laravel storage directory is not writable.',
+            ],
+
+            'https' => [
+                'label' => 'HTTPS Connection',
+                'status' => $httpsEnabled || $environment === 'local',
+                'message' => $httpsEnabled
+                    ? 'The application is served over HTTPS.'
+                    : 'HTTPS is not detected. Enable HTTPS in production.',
+            ],
+
+            'session_secure' => [
+                'label' => 'Session Secure Cookie',
+                'status' => $sessionSecure || $environment === 'local',
+                'message' => $sessionSecure
+                    ? 'Session cookies are marked as secure.'
+                    : 'Session cookies are not marked as secure. Enable in production.',
+            ],
+
+            'session_http_only' => [
+                'label' => 'Session HTTP Only',
+                'status' => $sessionHttpOnly,
+                'message' => $sessionHttpOnly
+                    ? 'Session cookies are HTTP only.'
+                    : 'Session cookies are accessible via JavaScript.',
+            ],
+
+            'session_same_site' => [
+                'label' => 'Session SameSite',
+                'status' => in_array($sessionSameSite, ['lax', 'strict', 'none'], true),
+                'message' => 'Session SameSite is set to ' . $sessionSameSite . '.',
+            ],
+
+            'env_modified' => [
+                'label' => '.env Last Modified',
+                'status' => true,
+                'message' => 'Configuration file last modified: ' . $envModifiedAt . '.',
             ],
         ];
     }
